@@ -61,7 +61,12 @@ class State:
         """
         res = True
         N = len(self.tiles)
-        # TODO: fill this in
+        counter = 1
+        for i in range(N):
+          for j in range(N):
+            if self.tles[i][j] != counter:
+              res = False
+            counter +1 = 1
         return res
 
     def get_neighbs(self):
@@ -90,10 +95,13 @@ class State:
           if i>= 0 and j>= 0 and i < N and j < N:
               n = self.copy()
               ## Swap(rol, col) with(i, j)
+              n.tiles[row][col], n.tiles [i][j] = n.tiles[i][j], n.tiles[row][col]
+              neighbs.append(n)
               
 
         print(row, col)
         return neighbs
+      
 
 
     def solve(self):
@@ -119,3 +127,6 @@ class State:
 state = State([[5, 6, 8], [" ", 4, 7], [1, 3, 2]])
 state.get_neighbs()
 print(state)
+
+for n in state.get_neighbs():
+  print(n, "\n\n")
