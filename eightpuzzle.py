@@ -138,3 +138,5 @@ for n in estado.get_neighbs():
 
 objetivo = Estado([[1, 2, 3], [4, 5, 6], [7, 8, " "]])
 print(objetivo.is_goal())
+
+"14:43"
