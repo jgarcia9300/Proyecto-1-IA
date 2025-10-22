@@ -1,13 +1,13 @@
-class State:
-    def __init__(self, tiles):
+class Estado:
+    def __init__(self, casillas):
         """
-        Parameters
+        Parametros
         ----------
-        tiles : 2D list
-            A list of lists of tiles. All are numbers except for the blank, which is " ".
-            Example: [[2, 6, 1], [7, " ", 3], [5, 8, 4]]
+        casillas : Lista 2D
+            Lista de listas de casillas. Todas las casillas son umeros a expecion del blanco que es " " 
+            Ejemplo: [[2, 6, 1], [7, " ", 3], [5, 8, 4]]
         """
-        self.tiles = tiles
+        self.casillas = casillas
         self.prev = None
 
     def __repr__(self):
@@ -15,12 +15,12 @@ class State:
         Returns
         -------
         str
-            Printable string representation of the board
+            Printable string del tablero
         """
         s = ""
-        for i in range(len(self.tiles)):
-            for j in range(len(self.tiles[i])):
-                s += "{} ".format(self.tiles[i][j])
+        for i in range(len(self.casillas)):
+            for j in range(len(self.casillas[i])):
+                s += "{} ".format(self.casillas[i][j])
             s += "\n"
         return s
 
@@ -28,105 +28,113 @@ class State:
         """
         Overload the less-than operator so that ties can be broken
         automatically in a heap without crashing.
-
-        Parameters
+        Sobrecarga el operador menor que en para que los empates se
+        resuelvan automaticamente en una estructura monton (heap) sin que
+        el programa se bloquee
+        Parametros
         ----------
-        other : State
-            Another state
+        Otro : Estado
+            Otro Estado
 
-        Returns
+        Retorna
         -------
         bool
             Result of < comparison between string representations
+            Resultado de la comparacion entre strings (<)
         """
         return str(self) < str(other)
 
     def copy(self):
         """
-        Return a deep copy of this state
+        Retorna una copia profunda de este estado
         """
-        tiles = []
-        for i in range(len(self.tiles)):
-            tiles.append([])
-            for j in range(len(self.tiles[i])):
-                tiles[i].append(self.tiles[i][j])
-        return State(tiles)
+        casillas = []
+        for i in range(len(self.casillas)):
+            casillas.append([])
+            for j in range(len(self.casillas[i])):
+                casillas[i].append(self.casillas[i][j])
+        return Estado(casillas)
 
     def is_goal(self):
         """
-        Returns
+        Retorna
         -------
         bool
-            True if this is a goal state, False otherwise
+            Verdadero si es el estado objetivo, de lo contrario retorna falso
         """
         res = True
-        N = len(self.tiles)
-        counter = 1
+        N = len(self.casillas)
+        contador = 1
         for i in range(N):
           for j in range(N):
-            if self.tles[i][j] != counter:
-              res = False
-            counter +1 = 1
+            if i != N-1 or j != N-1:
+                if self.casillas[i][j] != contador:
+                    res = False
+            contador += 1
         return res
 
     def get_neighbs(self):
         """
-        Get this state's neighboring states
-
-        Returns
+        Retorna
         -------
-        list of State
-            A list of neighboring states
+        lista de estados
+            Una lista de los estados de los vecinos
         """
-        N=len(self.tiles)
+        N=len(self.casillas)
         neighbs = []
       
-        ## Step 1: find the row and col of the blank
-        row = 0
-        col = 0
+        ## Paso 1: Encontrar la fila y la columna de la casilla que esta en blanco
+        fila = 0
+        columna = 0
         for i in range (N):
             for j in range(N):
-                if self.tiles[i][j] == " ":
-                    row = i
-                    col = j
-        # Step 2: Swap this index with neighbor
-        ## that it can be swapped with
-        for [i, j] in [[row-1, col], [row+1, col], [row, col-1], [row, col+1]]:
+                if self.casillas[i][j] == " ":
+                    fila = i
+                    columna = j
+        # Paso 2: Intercambia este indice con el vecino que pueda intercambiar
+        
+        for [i, j] in [[fila-1, columna], [fila+1, columna], [fila, columna-1], [fila, columna+1]]:
+   
           if i>= 0 and j>= 0 and i < N and j < N:
               n = self.copy()
               ## Swap(rol, col) with(i, j)
-              n.tiles[row][col], n.tiles [i][j] = n.tiles[i][j], n.tiles[row][col]
+              n.casillas[fila][columna], n.casillas [i][j] = n.casillas[i][j], n.casillas[fila][columna]
               neighbs.append(n)
               
 
-        print(row, col)
+        print(fila, columna)
         return neighbs
       
 
 
     def solve(self):
         """
-        Find a shortest path from this state to a goal state
+        Encuentra el camino mas corto desde este estado al estado objetivo
 
-        Returns
+        Retorna
         -------
-        list of State
-            A path from this state to a goal state, where the first element
-            is this state and the last element is the goal
+        lista de estados
+             Un camino desde este estado al estado objetivo 
+             donde el primer elemento es este estado y el ultimo el objetivo
+    
         """
-        visited = {}
-        queue = [self]
-        finished = False
+        vistado = {}
+        cola = [self]
+        finalizado = False
         # TODO: fill this in
 
-        solution = []
-        return solution
+        solucion = []
+        return solucion
 
 
-# Example usage:
-state = State([[5, 6, 8], [" ", 4, 7], [1, 3, 2]])
-state.get_neighbs()
-print(state)
+# Ejemplo
+estado = Estado([[1, 2, 3], [4, 5, 6], [7, 8, " "]])
+# state.get_neighbs()
+# print(state)
 
-for n in state.get_neighbs():
-  print(n, "\n\n")
+for n in estado.get_neighbs():
+    print(n, "\n\n")
+
+
+objetivo = Estado([[1, 2, 3], [4, 5, 6], [7, 8, " "]])
+print(objetivo.is_goal())
