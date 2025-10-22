@@ -4,7 +4,7 @@ class Estado:
         Parametros
         ----------
         casillas : Lista 2D
-            Lista de listas de casillas. Todas las casillas son umeros a expecion del blanco que es " " 
+            Lista de listas de casillas. Todas las casillas son numeros a expecion del blanco que es " " 
             Ejemplo: [[2, 6, 1], [7, " ", 3], [5, 8, 4]]
         """
         self.casillas = casillas
@@ -12,7 +12,7 @@ class Estado:
 
     def __repr__(self):
         """
-        Returns
+        Retorna
         -------
         str
             Printable string del tablero
@@ -26,20 +26,16 @@ class Estado:
 
     def __lt__(self, other):
         """
-        Overload the less-than operator so that ties can be broken
-        automatically in a heap without crashing.
-        Sobrecarga el operador menor que en para que los empates se
+        Sobrecarga el operador menor que  para que los empates se
         resuelvan automaticamente en una estructura monton (heap) sin que
         el programa se bloquee
         Parametros
         ----------
         Otro : Estado
-            Otro Estado
 
         Retorna
         -------
         bool
-            Result of < comparison between string representations
             Resultado de la comparacion entre strings (<)
         """
         return str(self) < str(other)
@@ -97,7 +93,7 @@ class Estado:
    
           if i>= 0 and j>= 0 and i < N and j < N:
               n = self.copy()
-              ## Swap(rol, col) with(i, j)
+              ## Intercambio(fila, columna) con(i, j)
               n.casillas[fila][columna], n.casillas [i][j] = n.casillas[i][j], n.casillas[fila][columna]
               neighbs.append(n)
               
@@ -118,10 +114,13 @@ class Estado:
              donde el primer elemento es este estado y el ultimo el objetivo
     
         """
-        vistado = {}
-        cola = [self]
+
         finalizado = False
-        # TODO: fill this in
+
+        frontera = DoubleLinkedList()
+
+
+        # TODO: Para realizar
 
         solucion = []
         return solucion
