@@ -1,3 +1,5 @@
+from listaenlazada import DobleListaEnlazada
+
 class Estado:
     def __init__(self, casillas):
         """
@@ -23,6 +25,12 @@ class Estado:
                 s += "{} ".format(self.casillas[i][j])
             s += "\n"
         return s
+      
+    def __eq__(self, other):
+      return str(self) == str(other) 
+    
+    def __hash__(self):
+       return hash(tuple([tuple(x) for x in self.casillas]))
 
     def __lt__(self, other):
         """
@@ -98,7 +106,7 @@ class Estado:
               neighbs.append(n)
               
 
-        print(fila, columna)
+  
         return neighbs
       
 
@@ -117,25 +125,49 @@ class Estado:
 
         finalizado = False
 
-        frontera = DoubleLinkedList()
+        #frontera: nodos descubiertos pero no explorados
+        frontera = DobleListaEnlazada()
+        frontera.add_last(self)
+        
+        limite_frontera = set ([self])
+        visitado = set([])
+        
+        #Cada vertice pasa por la frontera solo una vez
+        v = None
+        while not finalizado and len(frontera) > 0: # 0(V) iteraciones
+          print(len(frontera))
+          v = frontera.remove_first() # 0(1)
+          visitado.add(v)
+          limite_frontera.remove(v)
+          if v.is_goal():
+            finalizado = True
+          else:
+             #revisa cada vecino de v
+            for n in v.get_neighbs():
+              if n  not in limite_frontera and n not in visitado:
+                """
+                Cambia el estado del nodo para indicar que se agrega
+                al final de la frontera
+                
+                """
+                limite_frontera.add(n)
+                n.prev = v
+                frontera.add_last(n)
+   
 
-
+  
         # TODO: Para realizar
 
-        solucion = []
+        solucion = [v]
+        while v.prev:
+          v = v.prev
+          solucion.append(v)
+        solucion.reverse()
         return solucion
 
 
 # Ejemplo
-estado = Estado([[1, 2, 3], [4, 5, 6], [7, 8, " "]])
-# state.get_neighbs()
-# print(state)
-
-for n in estado.get_neighbs():
-    print(n, "\n\n")
-
-
-objetivo = Estado([[1, 2, 3], [4, 5, 6], [7, 8, " "]])
-print(objetivo.is_goal())
-
-"14:43"
+estado1 = Estado([[5, 6, 8], [" ", 4, 7], [1, 3, 2]])
+solucion = estado1.solve()
+for x in solucion:
+    print(x, end="\n\n")
