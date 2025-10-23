@@ -110,60 +110,44 @@ class Estado:
         return neighbs
       
 
-
     def solve(self):
         """
-        Encuentra el camino mas corto desde este estado al estado objetivo
-
-        Retorna
-        -------
-        lista de estados
-             Un camino desde este estado al estado objetivo 
-             donde el primer elemento es este estado y el ultimo el objetivo
-    
+        Encuentra el camino más corto desde este estado al estado objetivo.
         """
 
         finalizado = False
 
-        #frontera: nodos descubiertos pero no explorados
-        frontera = DobleListaEnlazada()
-        frontera.add_last(self)
-        
-        limite_frontera = set ([self])
+        # Cola de estados descubiertos pero no explorados
+        cola_estados = DobleListaEnlazada()
+        cola_estados.add_last(self)
+
+        limite_frontera = set([self])
         visitado = set([])
-        
-        #Cada vertice pasa por la frontera solo una vez
-        v = None
-        while not finalizado and len(frontera) > 0: # 0(V) iteraciones
-          print(len(frontera))
-          v = frontera.remove_first() # 0(1)
-          visitado.add(v)
-          limite_frontera.remove(v)
-          if v.is_goal():
-            finalizado = True
-          else:
-             #revisa cada vecino de v
-            for n in v.get_neighbs():
-              if n  not in limite_frontera and n not in visitado:
-                """
-                Cambia el estado del nodo para indicar que se agrega
-                al final de la frontera
-                
-                """
-                limite_frontera.add(n)
-                n.prev = v
-                frontera.add_last(n)
-   
 
-  
-        # TODO: Para realizar
+        estado_actual = None
+        while not finalizado and len(cola_estados) > 0:
+            print(len(cola_estados))
+            estado_actual = cola_estados.remove_first()
+            visitado.add(estado_actual)
+            limite_frontera.remove(estado_actual)
 
-        solucion = [v]
-        while v.prev:
-          v = v.prev
-          solucion.append(v)
+            if estado_actual.is_goal():
+                finalizado = True
+            else:
+                for vecino in estado_actual.get_neighbs():
+                    if vecino not in limite_frontera and vecino not in visitado:
+                        limite_frontera.add(vecino)
+                        vecino.prev = estado_actual
+                        cola_estados.add_last(vecino)
+
+        # Reconstruir el camino de solución
+        solucion = [estado_actual]
+        while estado_actual.prev:
+            estado_actual = estado_actual.prev
+            solucion.append(estado_actual)
         solucion.reverse()
         return solucion
+
 
 
 # Ejemplo
