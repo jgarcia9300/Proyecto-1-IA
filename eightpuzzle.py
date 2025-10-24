@@ -1,4 +1,5 @@
 from listaenlazada import DobleListaEnlazada
+import time
 
 class Estado:
     def __init__(self, casillas):
@@ -152,6 +153,10 @@ class Estado:
 
 # Ejemplo
 estado1 = Estado([[5, 6, 8], [" ", 4, 7], [1, 3, 2]])
+tiempo_inicial = time.perf_counter()
 solucion = estado1.solve()
+tiempo_final = time.perf_counter()
 for x in solucion:
     print(x, end="\n\n")
+
+print("el tiempo empleado fue", round(tiempo_final - tiempo_inicial,3), "segundos")
