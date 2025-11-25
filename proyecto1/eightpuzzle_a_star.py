@@ -66,14 +66,14 @@ class AlgoritmoAEstrella:
   
         frontera = []  # nodos por explorar (ordenados por f = g + h)
         heapq.heappush(frontera, (0, NodoRompecabezas(self.estado_inicial)))
-        cerrada = set()  # estados ya explorados
+        explorados = set()  # estados ya explorados
 
         while frontera:
             _, nodo_actual = heapq.heappop(frontera)
 
-            if nodo_actual.estado in cerrada:
+            if nodo_actual.estado in explorados:
                 continue
-            cerrada.add(nodo_actual.estado)
+            explorados.add(nodo_actual.estado)
 
             if nodo_actual.resuelto:
                 return nodo_actual.camino
@@ -81,7 +81,7 @@ class AlgoritmoAEstrella:
             # movimientos válidos
             for funcion_movimiento, nombre_movimiento in nodo_actual.estado_tablero.movimientos_validos:
                 nodo_hijo = NodoRompecabezas(funcion_movimiento(), nodo_actual, nombre_movimiento)
-                if nodo_hijo.estado not in cerrada:
+                if nodo_hijo.estado not in explorados:
                     heapq.heappush(frontera, (nodo_hijo.f, nodo_hijo))
 
         return None  # en caso de no hallar solucion
@@ -117,7 +117,7 @@ class Rompecabezas:
 
     @property
     def movimientos_validos(self):
-        """geenra todos los movimientos posibles desde el estado actual"""
+        """genera todos los movimientos posibles desde el estado actual"""
         def crear_movimiento(desde, hacia):
             return lambda: self.aplicar_movimiento(desde, hacia)
 
@@ -152,7 +152,6 @@ class Rompecabezas:
         print()
 
 
-
 """
 EJEMPLO
 """
@@ -171,10 +170,6 @@ tiempo_fin = time.perf_counter()
 pasos = 0
 print("=== SOLUCION ===\n")
 for nodo in camino_solucion:
-    if nodo.movimiento:
-        print(f"Movimiento: {nodo.movimiento}")
-    else:
-        print("Estado inicial:")
     nodo.estado_tablero.imprimir()
     pasos += 1
 
